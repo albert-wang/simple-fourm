@@ -1,0 +1,54 @@
+/* Reset padding and margin on most elements */
+* { padding: 0px; margin: 0px; }
+
+
+body
+{
+	font-family: "Open Sans", "Verdana", arial, sans-serif;
+}
+
+#content header
+{
+	width: 100%;
+	height: 50px;
+	background-color: rgba(255, 255, 255, 0.9);
+	border-bottom: 1px solid #E0E0E0;
+	position: fixed;
+	z-index: 100;
+}
+
+#content header ul, li, h1
+{
+	display: inline-block;
+}
+
+#content header h1
+{
+	font-size: xx-large;
+	margin: 2px 0px 0px 20px;
+}
+
+#content header ul
+{
+	position: absolute;
+	top: 15px;
+	right: 10px;
+}
+
+#content header li
+{
+	padding: 0px 15px 0px 15px;
+	border-right: 1px dotted #E0E0E0;
+	font-size: 90%;
+}
+
+#content header li:last-child
+{
+	border: none;
+}
+
+div #clearnav
+{
+	padding-top: 70px;
+	display: block;
+}
