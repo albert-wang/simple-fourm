@@ -5,6 +5,17 @@
 body
 {
 	font-family: "Open Sans", "Verdana", arial, sans-serif;
+	height: 100%;
+}
+
+html 
+{
+	height: 100%;
+}
+
+div#content
+{
+	height: 100%;
 }
 
 #content header
@@ -49,6 +60,37 @@ body
 
 div #clearnav
 {
-	padding-top: 70px;
+	display: block;
+}
+
+div #navigation 
+{
+	position: absolute; 
+	top: 0px;
+	bottom: 0px;
+	width: 30%;
+	border-right: 1px solid #E0E0E0;
+	overflow: hidden;
+}
+
+div #thread 
+{
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 30%;
+	width: 68%;
+	overflow: hidden;
+}
+
+div .scrollable 
+{
+	height: 100%;
+	position: relative;
+	top: 50px;
+}
+
+#navigation li, #thread li
+{
 	display: block;
 }
