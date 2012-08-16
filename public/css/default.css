@@ -85,9 +85,16 @@ div #thread
 
 div .scrollable 
 {
-	height: 100%;
 	position: relative;
 	top: 50px;
+}
+
+div .scrollbar
+{
+	position: fixed;
+	width: 5px;
+	left: 2px;
+	background-color: rgba(0, 0, 0, 0.7);
 }
 
 #navigation li, #thread li

@@ -6,41 +6,69 @@
 	function createScrollable(id)
 	{
 		var main = $("#" + id + " > .scrollable");
+    var bar  = $("#" + id + " > .scrollbar");
+
+    /*
+     * Bar position = (position / total) * (total - barsize)
+     * barsize / scrollsize = pagesize / totalsize;
+     *  -> pagesize / totalsize * scrollsize;
+     */
+    
+    function resetBar()
+    {
+      var min = 0;
+      var max = main.height() - $(document).height() + INITIAL_OFFSET;
+
+      var size = ($(document).height() - INITIAL_OFFSET) * ($(document).height() - INITIAL_OFFSET) / main.height();
+      bar.css("height", size + "px");
+
+      var off = main.data("top") || 0;
+      off = off / max * ($(document).height() - size - INITIAL_OFFSET);
+      off = off + INITIAL_OFFSET;
+
+      bar.css("top", off + "px");
+    }
+
+    $(window).resize(resetBar);
 
 		main.bind("mousewheel", function(event)
 		{
-			var ct = event.currentTarget;
-			var position = $(ct).data("top") || INITIAL_OFFSET;
+      bar.css("opacity", 1.0);
+      bar.show();
 
+			var position = $(main).data("top") || 0;
 			var delta = event.originalEvent.wheelDelta;
 
 			if (delta >= 0)
 			{
-				position += SCROLL_AMOUNT;
+				position -= SCROLL_AMOUNT;
 			} 
 			else 
 			{
-				position -= SCROLL_AMOUNT;
+				position += SCROLL_AMOUNT;
 			}
 
-			if (position > INITIAL_OFFSET)
+			if (position < 0)
 			{
-				position = INITIAL_OFFSET;
+				position = 0;
 			}
 
-			if (position < -(main.height() - $(document).height()))
+			if (position > (main.height() - $(document).height() + INITIAL_OFFSET))
 			{
-				position = -(main.height() - $(document).height());
+				position = (main.height() - $(document).height() + INITIAL_OFFSET);
 			}
 
-			$(ct).data("top", position);
-			$(ct).css("top", position);
+			$(main).data("top", position);
+			$(main).css("top", -position + INITIAL_OFFSET);
+
+      resetBar();
+
+      bar.stop(true);
+      bar.delay(250).fadeOut();
 		});
 
-		
+    resetBar();
 	}
-
-
 
 	fourm = {};
 	fourm.ui = {
