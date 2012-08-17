@@ -166,6 +166,12 @@ div #thread > .scrollbar
     margin-right: 7px;
 }
 
+#navigation ul > ul
+{
+	margin-left: 20px;
+	margin-right: 0px;
+}
+
 div.avatar
 {
     width: auto;

@@ -7,7 +7,7 @@
 
 	function createScrollable(id)
 	{
-		var main = $("#" + id + " > .scrollable");
+      var main = $("#" + id + " > .scrollable");
 	    var bar  = $("#" + id + " > .scrollbar");
 
 	    /*
@@ -31,17 +31,14 @@
 		    bar.css("top", off + "px");
 	    }
 
-	    $(window).resize(resetBar);
-
-	    main.bind("mousewheel", function(event)
-	    {
-	        bar.css("opacity", 1.0);
+      function moveBar(delta)
+      {
+          bar.css("opacity", 1.0);
 	        bar.show();
 
 	        var position = $(main).data("top") || 0;
-	        var delta = event.originalEvent.wheelDelta;
 
-	        if (delta >= 0) {
+	        if (delta > 0) {
 	            position -= SCROLL_AMOUNT;
 	        }
 	        else {
@@ -63,15 +60,47 @@
 
 	        bar.stop(true);
 	        bar.delay(250).fadeOut();
-	    });
+
+      }
+
+	    $(window).resize(function() {
+        resetBar();
+        moveBar(0);
+      });
+
+	    main.bind("mousewheel", function(event)
+	    {
+        moveBar(event.originalEvent.wheelDelta);
+      });
 
 	    resetBar();
 	}
 
+  function renderThreads(threads, depth)
+  {
+    var result = "";
+    if (!depth) {
+      depth = 0;
+    }
+
+    for (x in threads) { 
+      var obj = threads[x];
+      result += Mustache.render(fourm.templates.navigation, obj);
+      if (obj.children) {
+        result += "<ul class='collapsable'>"; 
+        result += renderThreads(obj.children, depth + 1);
+        result += "</ul>";
+      }
+    }
+
+    return result;
+  }
+
 	var fourm = {};
 	fourm.ui =
     {
-		createScrollable: createScrollable
+		createScrollable: createScrollable,
+    renderThreads: renderThreads
     }
 
 	window.fourm = fourm;
@@ -81,14 +110,12 @@
 (function ()
 {
 	var navigationTemplate =
-		"{{#titles}}" + 
-			"<a href='#'><li>" +
-				"<div class='title'><div class='avatar'><img src='http://2.gravatar.com/avatar/0d8d5485c71164e89c41f0cc22d8cc10'/></div>" +
-				"<p>{{title}}<span class='extra'>&nbsp;{{extra}}</span></p><span class='count'>{{count}}</span></div><div class='clearboth'></div>" +
-			"</li></a>" + 
-		"{{/titles}}"
+    "<a href='#'><li>" +
+      "<div class='title'><div class='avatar'><img src='http://2.gravatar.com/avatar/0d8d5485c71164e89c41f0cc22d8cc10'/></div>" +
+      "<p>{{title}}<span class='extra'>&nbsp;{{extra}}</span></p><span class='count'>{{count}}</span></div><div class='clearboth'></div>" +
+    "</li></a>";
 
 	window.fourm.templates = {
-		navigation: navigationTemplate
+		navigation: navigationTemplate,
 	}
 }())

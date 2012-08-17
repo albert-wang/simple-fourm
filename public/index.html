@@ -2,6 +2,7 @@
 <html>
 <head>
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" type="text/css" />
+	<link href='/fourm/css/font-awesome.css' rel='stylesheet' type='text/css' />
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script> 
     <script src="/fourm/js/mustache.js"></script>
@@ -13,15 +14,40 @@
 	$(document).ready(function() {
 	    var titles = [];
 	    for (var i = 0; i < 100; ++i) {
-	        var view = { title: "This is long long long long a title: " + i, count: 100 - i };
+	        var view = { 
+				title: "This is long long long long a title: " + i, 
+				count: 100 - i, 
+				id: i 
+			};
+
 	        if (i < 5) {
                 view.extra = "(Sticky)"
 	        }
 
+			if (i < 3) {
+				var children = [];
+				for (var j = 0; j < 5; ++j) {
+					var v = { title: "This is a child for" + i, count: 100 - i };
+					children.push(v);
+				}
+
+				view.children = children;
+			}
+
 	        titles.push(view);
 	    }
 
-	    $(".scrollable > ul").append(Mustache.render(fourm.templates.navigation, { titles: titles }));
+	    $(".scrollable > ul").append(fourm.ui.renderThreads(titles));
+		$(".collapsable").click(function(event) {
+			var target = event.currentTarget;
+			$(target).slideUp();
+		});
+
+		$(".thread").click(function(event) {
+			var current = event.currentTarget;
+			console.log(current);
+			$(current).children(".collapsable").slideDown();
+		});
 
 		fourm.ui.createScrollable("navigation");
 		fourm.ui.createScrollable("thread");
