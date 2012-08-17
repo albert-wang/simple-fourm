@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" type="text/css" />
+
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script> 
-	<script src="/fourm/js/fourm.ui.js"></script>
+    <script src="/fourm/js/mustache.js"></script>
+	<!-- <script src="/fourm/js/backbone.js"></script> -->
+    <script src="/fourm/js/fourm.ui.js"></script>
+    
+
 	<script>
 	$(document).ready(function() {
-		for (var i = 0; i < 100; ++i) {
-			$(".scrollable > ul").append("<li>" + i + "</li>");
-		}
+	    var titles = [];
+	    for (var i = 0; i < 100; ++i) {
+	        var view = { title: "This is long long long long a title: " + i, count: 100 - i };
+	        if (i < 5) {
+                view.extra = "(Sticky)"
+	        }
+
+	        titles.push(view);
+	    }
+
+	    $(".scrollable > ul").append(Mustache.render(fourm.templates.navigation, { titles: titles }));
 
 		fourm.ui.createScrollable("navigation");
 		fourm.ui.createScrollable("thread");
 	});
 	</script>
 
-	<link href="//fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" type="text/css" />
+    <title>{araboth}</title>
+	
 	<link href="/fourm/css/default.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -29,15 +44,15 @@
 				<li>Settings</li>
 			</ul>
 		</header>
-		<div id='clearnav'></div>
+		<div id='clearnavigation'></div>
 		<div id='navigation'>
-			<div class='scrollbar'>
-			</div>
+			<div class='scrollbar'></div>
 			<div class='scrollable'>
 				<ul></ul>
 			</div>
 		</div>
 		<div id='thread'>
+            <div class='scrollbar'></div>
 			<div class='scrollable'>
 				<ul></ul>
 			</div>
