@@ -76,24 +76,12 @@
 	    resetBar();
 	}
 
-  function renderThreads(threads, depth)
+  function renderThreads(threads, cb)
   {
-    var result = "";
-    if (!depth) {
-      depth = 0;
-    }
-
-    for (x in threads) { 
-      var obj = threads[x];
-      result += Mustache.render(fourm.templates.navigation, obj);
-      if (obj.children) {
-        result += "<ul class='collapsable'>"; 
-        result += renderThreads(obj.children, depth + 1);
-        result += "</ul>";
-      }
-    }
-
-    return result;
+    return dust.render("thread", { threads: threads }, function(err, out)
+    {
+      cb(out);
+    });
   }
 
 	var fourm = {};
@@ -110,12 +98,18 @@
 (function ()
 {
 	var navigationTemplate =
-    "<a href='#'><li>" +
-      "<div class='title'><div class='avatar'><img src='http://2.gravatar.com/avatar/0d8d5485c71164e89c41f0cc22d8cc10'/></div>" +
-      "<p>{{title}}<span class='extra'>&nbsp;{{extra}}</span></p><span class='count'>{{count}}</span></div><div class='clearboth'></div>" +
-    "</li></a>";
+    "{#threads}{>thread_core:./}{/threads}";
 
-	window.fourm.templates = {
-		navigation: navigationTemplate,
-	}
+  var threadCore = 
+    "<a href='#'><li><div class='title'><div class='avatar'><img src='http://2.gravatar.com/avatar/0d8d5485c71164e89c41f0cc22d8cc10'/></div>" + 
+      "<p>{title}<span class='extra'>&nbsp;{extra}</span></p><span class='count'>{count}</span></div></li></a>" + 
+    "{?children}<ul class='collapsable'>{#children}{>thread_core:./}{/children}</ul>{/children}";
+
+
+  dust.loadSource(dust.compile(threadCore, "thread_core"));
+  dust.loadSource(dust.compile(navigationTemplate, "thread"));
+
+  window.fourm.ui.templates = {
+    navigation: navigationTemplate
+  }
 }())
