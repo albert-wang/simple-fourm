@@ -4,6 +4,7 @@
 {
 	var INITIAL_OFFSET = 50;
 	var SCROLL_AMOUNT = 250;
+  var BOTTOM_MARGIN = 45;
 
 	function createScrollable(id)
 	{
@@ -19,7 +20,7 @@
 	    function resetBar()
 	    {
 		    var min = 0;
-		    var max = main.height() - $(document).height() + INITIAL_OFFSET;
+		    var max = main.height() - $(document).height() + INITIAL_OFFSET + BOTTOM_MARGIN;
 
 		    var size = ($(document).height() - INITIAL_OFFSET) * ($(document).height() - INITIAL_OFFSET) / main.height();
 		    bar.css("height", size + "px");
@@ -49,8 +50,8 @@
 	            position = 0;
 	        }
 
-	        if (position > (main.height() - $(document).height() + INITIAL_OFFSET)) {
-	            position = (main.height() - $(document).height() + INITIAL_OFFSET);
+	        if (position > (main.height() - $(document).height() + INITIAL_OFFSET + BOTTOM_MARGIN)) {
+	            position = (main.height() - $(document).height() + INITIAL_OFFSET + BOTTOM_MARGIN);
 	        }
 
 	        $(main).data("top", position);
@@ -60,7 +61,6 @@
 
 	        bar.stop(true);
 	        bar.delay(250).fadeOut();
-
       }
 
 	    $(window).resize(function() {
